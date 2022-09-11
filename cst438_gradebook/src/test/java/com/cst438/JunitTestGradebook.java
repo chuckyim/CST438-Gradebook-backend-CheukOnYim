@@ -248,6 +248,7 @@ public class JunitTestGradebook {
 		verify(assignmentGradeRepository, times(1)).save(updatedag);
 	}
 	
+	//test1
 	@Test
 	public void addAssignment() throws Exception {
 		MockHttpServletResponse response;
@@ -302,6 +303,7 @@ public class JunitTestGradebook {
 		verify(assignmentRepository, times(1)).save(any());
 	}
 	
+	//test2
 	@Test
 	public void updateAssignmentName() throws Exception {
 		MockHttpServletResponse response;
@@ -349,6 +351,7 @@ public class JunitTestGradebook {
 		verify(assignmentRepository, times(1)).save(any());
 	}
 	
+	//test3
 	@Test
     public void deleteAssignment() throws Exception {
 

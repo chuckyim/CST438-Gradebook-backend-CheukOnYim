@@ -172,6 +172,7 @@ public class GradeBookController {
 		return assignment;
 	}
 	
+	//https request
 	//Create assignment
 	@PostMapping("/assignment")
 	@Transactional

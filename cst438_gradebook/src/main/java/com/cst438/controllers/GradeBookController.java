@@ -160,7 +160,7 @@ public class GradeBookController {
 	
 	private Assignment checkAssignment(int assignmentId, String email) {
 		// get assignment 
-		Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);
+		Assignment assignment = assignmentRepository.findById(assignmentId);//.orElse(null);
 		if (assignment == null) {
 			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Assignment not found. "+assignmentId );
 		}
@@ -204,6 +204,7 @@ public class GradeBookController {
 		}
 	}
 	
+	//Delete assignment 
 	@DeleteMapping("/assignment/{assignmentId}")
 	@Transactional
 	public void deleteAssignment(@PathVariable int assignmentId) {

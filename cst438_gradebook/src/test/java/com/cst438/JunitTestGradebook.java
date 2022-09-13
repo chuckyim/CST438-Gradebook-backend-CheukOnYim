@@ -247,7 +247,7 @@ public class JunitTestGradebook {
 		updatedag.setScore("88");
 		verify(assignmentGradeRepository, times(1)).save(updatedag);
 	}
-	
+
 	//test1
 	@Test
 	public void addAssignment() throws Exception {
@@ -395,7 +395,6 @@ public class JunitTestGradebook {
        assertEquals(200, response.getStatus());
 
     }
-	
 	private static String asJsonString(final Object obj) {
 		try {
 

@@ -172,4 +172,52 @@ public class GradeBookController {
 		return assignment;
 	}
 	
+	//https request
+	//Create assignment
+	@PostMapping("/assignment")
+	@Transactional
+	public void addNewAssignment (@RequestBody(required=false) Assignment a) {
+		Assignment assignment = new Assignment();
+
+		//Set name, due date and courseId then save 
+		assignment.setName(a.getName());
+		assignment.setDueDate(a.getDueDate());
+		assignment.setCourse(a.getCourse());
+		assignmentRepository.save(assignment);
+		
+	}
+	
+	//Update assignment's name
+	@PutMapping("/assignment/{assignmentId}")
+	@Transactional
+	public void changeAssignmentName(@PathVariable int assignmentId, @RequestBody String name) {
+		
+		//Find assignment by ID
+		Assignment assignment = assignmentRepository.findById(assignmentId);
+		
+		if(assignment == null) {
+			throw new NullPointerException( );
+		}
+		else {
+		//Update assignment name and save
+		assignment.setName(name);
+		assignmentRepository.save(assignment);
+		}
+	}
+	
+	//Delete assignment 
+	@DeleteMapping("/assignment/{assignmentId}")
+	@Transactional
+	public void deleteAssignment(@PathVariable int assignmentId) {
+		
+		//Find assignment by ID
+		Assignment assignment = assignmentRepository.findById(assignmentId);
+		
+		if(assignment.getNeedsGrading() == 0) {
+			assignmentRepository.delete(assignment);
+		} else {
+			throw new NullPointerException( );
+		}
+		
+	}
 }

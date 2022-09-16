@@ -2,7 +2,10 @@ package com.cst438.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -176,14 +179,19 @@ public class GradeBookController {
 	//Create assignment
 	@PostMapping("/assignment")
 	@Transactional
-	public void addNewAssignment (@RequestBody(required=false) Assignment a) {
+	public void addNewAssignment (@RequestBody(required=false) AssignmentListDTO.AssignmentDTO a) throws ParseException {
 		Assignment assignment = new Assignment();
 
-		//Set name, due date and courseId then save 
-		assignment.setName(a.getName());
-		assignment.setDueDate(a.getDueDate());
-		assignment.setCourse(a.getCourse());
-		assignmentRepository.save(assignment);
+		Course c = courseRepository.findById(a.courseId).get();
+		if (c == null) {
+			throw new NullPointerException( );
+		}else {
+			//Set name, due date and courseId then save 
+			assignment.setName(a.assignmentName);
+			assignment.setDueDate(java.sql.Date.valueOf(a.dueDate));
+			assignment.setCourse(c);
+			assignmentRepository.save(assignment);
+		}
 		
 	}
 	

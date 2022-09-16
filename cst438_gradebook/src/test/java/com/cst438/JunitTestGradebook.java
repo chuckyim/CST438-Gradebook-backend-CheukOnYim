@@ -291,14 +291,11 @@ public class JunitTestGradebook {
 		// end of mock data
 	
 		//
-		// do an http POST request for creating an assignment
+		// do a POST request for creating an assignment
 		response = mvc.perform(
 				MockMvcRequestBuilders.post("/assignment")
 				.accept(MediaType.APPLICATION_JSON)
-	            .content( "{ \"name\":\"Journal\", \"dueDate\":\"2020-09-09\",     \"course\":\r\n"
-	            		+ "        {\r\n"
-	            		+ "            \"course_id\":654321\r\n"
-	            		+ "        } }" )
+	            .content( "{ \"assignmentName\":\"Journal\", \"dueDate\":\"2020-09-09\"}" )
 	            .contentType(MediaType.APPLICATION_JSON)
 	            ).andReturn().getResponse();
 		

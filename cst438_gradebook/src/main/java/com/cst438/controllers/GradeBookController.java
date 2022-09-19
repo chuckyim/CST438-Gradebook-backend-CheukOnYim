@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.cst438.domain.Assignment;
 import com.cst438.domain.AssignmentListDTO;
+import com.cst438.domain.AssignmentListDTO.AssignmentDTO;
 import com.cst438.domain.AssignmentGrade;
 import com.cst438.domain.AssignmentGradeRepository;
 import com.cst438.domain.AssignmentRepository;
@@ -179,19 +180,26 @@ public class GradeBookController {
 	//Create assignment
 	@PostMapping("/assignment")
 	@Transactional
-	public void addNewAssignment (@RequestBody(required=false) AssignmentListDTO.AssignmentDTO a) throws ParseException {
+	public AssignmentDTO createAssignmnt(@RequestBody AssignmentDTO adto) throws ResponseStatusException {
 		Assignment assignment = new Assignment();
 
-		Course c = courseRepository.findById(a.courseId).get();
-		if (c == null) {
-			throw new NullPointerException( );
-		}else {
-			//Set name, due date and courseId then save 
-			assignment.setName(a.assignmentName);
-			assignment.setDueDate(java.sql.Date.valueOf(a.dueDate));
-			assignment.setCourse(c);
-			assignmentRepository.save(assignment);
-		}
+		Course c = courseRepository.findById(adto.courseId).get();
+	    //if (c == null || !(c.getInstructor().equals(email))) { 
+		if (c == null ){ 
+	      // error.  either course not found or does not belong to instructor.
+	      throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Course not valid." );
+	    }
+	    // create assignment entity, set the fields and save 
+	    Assignment a = new Assignment();
+	    a.setName(adto.assignmentName);
+	    // convert dueData String to java.sql.Date
+	    a.setDueDate( Date.valueOf(adto.dueDate) );
+	    a.setCourse(c);
+	    a.setNeedsGrading(1);
+	    Assignment anew = assignmentRepository.save(a);
+	    adto.assignmentId = anew.getId();
+	    // return adto with primary id now filled in.
+	    return adto;
 		
 	}
 	
@@ -204,12 +212,12 @@ public class GradeBookController {
 		Assignment assignment = assignmentRepository.findById(assignmentId);
 		
 		if(assignment == null) {
-			throw new NullPointerException( );
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Assignment does not exist." );
 		}
 		else {
 		//Update assignment name and save
-		assignment.setName(name);
-		assignmentRepository.save(assignment);
+			assignment.setName(name);
+			assignmentRepository.save(assignment);
 		}
 	}
 	
@@ -224,7 +232,7 @@ public class GradeBookController {
 		if(assignment.getNeedsGrading() == 0) {
 			assignmentRepository.delete(assignment);
 		} else {
-			throw new NullPointerException( );
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Assignment needs grading or does not exist." );
 		}
 		
 	}

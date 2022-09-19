@@ -28,6 +28,7 @@ import com.cst438.controllers.GradeBookController;
 import com.cst438.domain.Assignment;
 import com.cst438.domain.AssignmentGrade;
 import com.cst438.domain.AssignmentGradeRepository;
+import com.cst438.domain.AssignmentListDTO.AssignmentDTO;
 import com.cst438.domain.AssignmentRepository;
 import com.cst438.domain.Course;
 import com.cst438.domain.CourseRepository;
@@ -285,19 +286,25 @@ public class JunitTestGradebook {
 		ag.setId(1);
 		ag.setScore("80");
 		ag.setStudentEnrollment(enrollment);
+		
+		AssignmentDTO aDTO = new AssignmentDTO(99, 123456, "test assignment", "2022-09-01", "Test_Course_title");
 
 		// given -- stubs for database repositories that return test data
+		//given(courseRepository.findById(TEST_COURSE_ID)).willReturn(course);
 		given(assignmentRepository.findById(1)).willReturn((assignment));
+		
+		
 		// end of mock data
 	
 		//
-		// do an http POST request for creating an assignment
+		// do a POST request for creating an assignment
 		response = mvc.perform(
-				MockMvcRequestBuilders.post("/assignment")
-				.accept(MediaType.APPLICATION_JSON)
-	            .content( "{ \"name\":\"Journal\", \"dueDate\":\"2020-09-09\" }" )
-	            .contentType(MediaType.APPLICATION_JSON)
-	            ).andReturn().getResponse();
+                MockMvcRequestBuilders
+                .post("/assignment")
+                .content(asJsonString(aDTO))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+              .andReturn().getResponse();
 		
 		assertEquals(200, response.getStatus());
 		verify(assignmentRepository, times(1)).save(any());

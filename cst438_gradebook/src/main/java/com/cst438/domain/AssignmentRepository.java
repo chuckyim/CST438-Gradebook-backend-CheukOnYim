@@ -14,4 +14,8 @@ public interface AssignmentRepository extends CrudRepository <Assignment, Intege
 	//new query
 	@Query("select a from Assignment a where a.id = :id")
 	Assignment findById(int id);
+	
+	@Query("select a from Assignment a where a.course.course_id = :CourseId and a.name = :AssignmentName")
+	Assignment findByCourseAndName(int CourseId, String AssignmentName);
+
 }

@@ -1,4 +1,4 @@
-package com.cst438;
+ package com.cst438;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,7 +42,7 @@ import com.cst438.domain.EnrollmentRepository;
 @SpringBootTest
 public class EndToEndTestSubmitGrades {
 
-	public static final String CHROME_DRIVER_FILE_LOCATION = "C:/chromedriver_win32/chromedriver.exe";
+	public static final String CHROME_DRIVER_FILE_LOCATION = "C:/Users/cheuk.yim/chromedriver.exe";
 
 	public static final String URL = "http://localhost:3000";
 	public static final String TEST_USER_EMAIL = "test@csumb.edu";
@@ -187,8 +187,8 @@ public class EndToEndTestSubmitGrades {
 			 */
 			ag = assignnmentGradeRepository.findByAssignmentIdAndStudentEmail(a.getId(), TEST_USER_EMAIL);
 			if (ag!=null) assignnmentGradeRepository.delete(ag);
-			enrollmentRepository.delete(e);
 			assignmentRepository.delete(a);
+			enrollmentRepository.delete(e);
 			courseRepository.delete(c);
 
 			driver.quit();
